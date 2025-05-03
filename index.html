@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>Music Player</title>
+  <title>Peled723 Playlist</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap');
@@ -256,6 +256,28 @@
       color: #aaa;
     }
 
+    /* 마스터 볼륨 슬라이더 (오른쪽 고정) */
+    #masterVolumeContainer {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 200px;
+      display: flex;
+      align-items: center;
+      z-index: 999;
+    }
+
+    #masterVolume {
+      writing-mode: bt-lr; /* 수직 슬라이더 */
+      -webkit-appearance: slider-vertical;
+      width: 8px;
+      height: 200px;
+      background: #aaa;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
   </style>
 </head>
 <body>
@@ -294,13 +316,17 @@
   </div>
 </div>
 
+<div id="masterVolumeContainer">
+  <input type="range" id="masterVolume" min="0" max="1" step="0.01" value="1" />
+</div>
+
 <script>
   const playlist = [
     { file: 'tainsisick.mp3', image: 'tainsisick.jpg', prod: 'peled723', title: '他人試食 feat. 重音テト' },
     { file: '메께헥께beaT.mp3', image: '메께헥께beaT.jpg', prod: 'peled723', title: '메께헥께beaT' },
-    { file: '태옥황가1부.mp3', image: '태옥황가1부.jpg', prod: 'peled723', title: '행복추구권치매즉시모람태옥황가(幸福追求權侵害卽是冒濫泰玉皇歌) - ⟪대옥연교(大玉蓮敎) 입교⟫ OST Part.1' },
+    { file: '태옥황가1부(수정).mp3', image: '태옥황가1부.jpg', prod: 'peled723', title: '행복추구권치매즉시모람태옥황가(幸福追求權侵害卽是冒濫泰玉皇歌) - ⟪대옥연교(大玉蓮敎) 입교⟫ OST Part.1' },
     { file: '태옥황가2부.mp3', image: '태옥황가2부.jpg', prod: 'peled723', title: '계몽기매직상지교환영인태옥황가(啓蒙己昧地上之敎歡迎人泰玉皇歌) - ⟪대옥연교(大玉蓮敎) 포교⟫ OST Part.2' },
-    { file: '태옥황가3부.mp3', image: '태옥황가3부.jpg', prod: 'peled723', title: '당시발벽소옥지즉시숭배태옥황가(當身發碧霄㓇地卽時崇拜泰玉皇歌) - ⟪대옥연교(大玉蓮敎) 숭배⟫ OST Part.3' }
+    { file: '태옥황가3부(수정).mp3', image: '태옥황가3부.jpg', prod: 'peled723', title: '당시발벽소옥지즉시숭배태옥황가(當身發碧霄㓇地卽時崇拜泰玉皇歌) - ⟪대옥연교(大玉蓮敎) 숭배⟫ OST Part.3' }
   ];
 
   const audio = new Audio();
@@ -487,6 +513,24 @@
   }
 
   loadSong(0);
+
+  // 마스터 볼륨 슬라이더 설정
+  const masterVolumeSlider = document.getElementById('masterVolume');
+
+  // 저장된 볼륨 값 불러오기
+  const savedVolume = localStorage.getItem('masterVolume');
+  if (savedVolume !== null) {
+    masterVolumeSlider.value = savedVolume;
+    audio.volume = parseFloat(savedVolume);
+  }
+
+  // 슬라이더 변경 시 볼륨 적용 + 저장
+  masterVolumeSlider.addEventListener('input', () => {
+    const newVolume = parseFloat(masterVolumeSlider.value);
+    audio.volume = newVolume;
+    localStorage.setItem('masterVolume', newVolume);
+  });
+  
 </script>
 </body>
 </html>
